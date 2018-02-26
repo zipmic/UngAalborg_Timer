@@ -19,9 +19,18 @@ public class GameController : MonoBehaviour
 
     public Animator HeartAnimator, TextAnimation;
 
+    public AudioSource audiosource;
+
+    public GameObject skiftpladser;
+
+
+    private bool GameHasRunOnce;
+
     void Start()
     {
         startTime = _timeCounter;
+
+        SliderGO.value = 0;
     }
 
 
@@ -43,16 +52,52 @@ public class GameController : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            audiosource.PlayOneShot(audiosource.clip);
+        }
+
+
+        // FIKSE KNAPPER 
+        if(Input.GetKeyDown(KeyCode.Minus))
+            {
+            _timeCounter -= 10;
+
+            if (GameHasRunOnce == false)
+            {
+                startTime = _timeCounter;
+            }
+            }
+
+        if(Input.GetKeyDown(KeyCode.Plus))
+        {
+            _timeCounter += 10;
+
+            if (GameHasRunOnce == false)
+            {
+                startTime = _timeCounter;
+            }
+        }
+
+        int min = Mathf.FloorToInt(_timeCounter / 60);
+        int sec = Mathf.FloorToInt(_timeCounter % 60);
+
+        TimerText.text = min.ToString("00") + ":" + sec.ToString("00");
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
 
         if (_runCounter)
         {
+
+            GameHasRunOnce = true;
             HeartAnimator.SetBool("runbeat",true);
 
 
-            int min = Mathf.FloorToInt(_timeCounter / 60);
-            int sec = Mathf.FloorToInt(_timeCounter % 60);
-
-            TimerText.text = min.ToString("00") + ":" + sec.ToString("00");
+           
             _timeCounter -= Time.deltaTime;
 
             if (_timeCounter <= 0)
@@ -60,11 +105,16 @@ public class GameController : MonoBehaviour
                 _timeCounter = 0;
                 TimerText.text = "00:00";
                 _runCounter = false;
-
+                audiosource.PlayOneShot(audiosource.clip);
+                skiftpladser.SetActive(true);
                 HeartAnimator.Stop();
+
+                SliderGO.gameObject.SetActive(false);
+                TimerText.gameObject.SetActive(false);
+
             }
 
-            if (_timeCounter <= 10 && _timeCounter > 0)
+            if (_timeCounter <= 11 && _timeCounter > 0)
             {
                 TextAnimation.SetTrigger("panic");
                 TimerText.color = Color.red;

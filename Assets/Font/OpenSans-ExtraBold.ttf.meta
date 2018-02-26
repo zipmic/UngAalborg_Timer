@@ -4,8 +4,8 @@ timeCreated: 1499369697
 licenseType: Pro
 TrueTypeFontImporter:
   serializedVersion: 4
-  fontSize: 120
-  forceTextureCase: -1
+  fontSize: 300
+  forceTextureCase: -2
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
